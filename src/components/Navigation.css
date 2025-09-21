@@ -1,0 +1,85 @@
+.navigation {
+  background: rgba(248, 178, 89, 0.9);
+  padding: 0;
+  border-bottom: 2px solid var(--darker-orange);
+  position: relative;
+  z-index: 100;
+  box-shadow: inset 0 2px 0px var(--white),
+    inset 0 -2px 0px var(--darker-orange), 0 2px 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  image-rendering: pixelated;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nav-brand h2 {
+  color: var(--black);
+  margin: 0;
+  font-size: 12px;
+  font-weight: normal;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-link {
+  background: var(--cream);
+  color: var(--black);
+  border: 2px solid var(--black);
+  padding: 8px 16px;
+  font-size: 8px;
+  font-weight: normal;
+  cursor: pointer;
+  transition: none;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.nav-link:hover {
+  box-shadow: inset -2px -2px 0px var(--white),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+.nav-link.active {
+  background: var(--dark-orange);
+  color: var(--white);
+  border-color: var(--darker-orange);
+  box-shadow: inset -2px -2px 0px var(--darker-orange),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-brand h2 {
+    font-size: 1.5em;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-link {
+    flex: 1;
+    text-align: center;
+  }
+}

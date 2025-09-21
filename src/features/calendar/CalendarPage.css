@@ -1,0 +1,374 @@
+.calendar-page {
+  flex: 1;
+  background: var(--light-yellow);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  image-rendering: pixelated;
+}
+
+.calendar-container {
+  background: var(--cream);
+  padding: 24px;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--darker-orange);
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange), 0 8px 25px rgba(0, 0, 0, 0.15),
+    0 4px 10px rgba(199, 93, 44, 0.2);
+  overflow: hidden; /* Ensure content doesn't spill out */
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-shrink: 0;
+}
+
+.calendar-header h1 {
+  text-align: center;
+  color: var(--black);
+  margin: 0;
+  font-size: 14px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0px var(--darker-orange);
+}
+
+.calendar-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  padding: 8px 12px;
+  background: var(--dark-orange);
+  color: var(--white);
+  border: 2px solid var(--black);
+  cursor: pointer;
+  font-weight: normal;
+  transition: none;
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.nav-btn:hover {
+  box-shadow: inset -2px -2px 0px var(--white),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+.today-btn {
+  background: var(--light-yellow);
+  color: var(--black);
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.calendar-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 2fr 350px 400px;
+  gap: 30px;
+  min-width: 0; /* Prevent grid items from overflowing */
+  overflow: hidden; /* Ensure proper scrolling behavior */
+}
+
+.calendar-grid-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevent overflow */
+  overflow: auto; /* Add scrollbars when needed */
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  margin-bottom: 10px;
+}
+
+.weekday {
+  padding: 12px;
+  text-align: center;
+  font-weight: normal;
+  color: var(--black);
+  background: var(--light-yellow);
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  border: 2px solid var(--darker-orange);
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  background: var(--darker-orange);
+  overflow: hidden;
+  flex: 1;
+  border: 2px solid var(--black);
+}
+
+.calendar-day {
+  background: var(--white);
+  padding: 12px;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: none;
+  position: relative;
+  border: 1px solid var(--light-yellow);
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+}
+
+.calendar-day:hover {
+  background: var(--cream);
+}
+
+.calendar-day.selected {
+  background: var(--dark-orange);
+  color: var(--white);
+  border-color: var(--darker-orange);
+}
+
+.calendar-day.today {
+  background: var(--light-yellow);
+  border: 2px solid var(--dark-orange);
+  color: var(--black);
+}
+
+.calendar-day.selected.today {
+  background: var(--dark-orange);
+  color: var(--white);
+  border-color: var(--darker-orange);
+}
+
+.calendar-day.other-month {
+  color: var(--darker-orange);
+  background: var(--cream);
+}
+
+.day-number {
+  font-weight: normal;
+  margin-bottom: 4px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+}
+
+.todo-count {
+  font-size: 6px;
+  background: var(--darker-orange);
+  color: var(--white);
+  padding: 2px 6px;
+  align-self: flex-start;
+  margin-top: auto;
+  font-family: "Press Start 2P", monospace;
+  border: 1px solid var(--black);
+}
+
+.calendar-day.selected .todo-count {
+  background: var(--white);
+  color: var(--black);
+}
+
+.sidebar {
+  background: var(--cream);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--darker-orange);
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+  overflow: auto; /* Add scrollbars when content overflows */
+  min-height: 0; /* Allow shrinking */
+}
+
+.sectograph-column {
+  background: var(--cream);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--darker-orange);
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+  min-width: 0; /* Prevent overflow */
+  overflow: auto; /* Add scrollbars when content overflows */
+  min-height: 0; /* Allow shrinking */
+}
+
+/* Remove margins from sectograph when inside calendar */
+.sectograph-column .sectograph-container {
+  margin: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+}
+
+.sidebar-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  color: var(--black);
+  font-size: 10px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sidebar-date {
+  color: var(--darker-orange);
+  font-size: 8px;
+  margin-top: 4px;
+  font-family: "Press Start 2P", monospace;
+}
+
+.sidebar-todos {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-empty {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 40px 20px;
+}
+
+.sidebar-todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-todo-item.completed {
+  opacity: 0.6;
+}
+
+.sidebar-todo-checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.sidebar-todo-text {
+  flex: 1;
+  font-size: 14px;
+}
+
+.sidebar-todo-item.completed .sidebar-todo-text {
+  text-decoration: line-through;
+  color: #6c757d;
+}
+
+@media (max-width: 1600px) {
+  .calendar-content {
+    grid-template-columns: 2fr 320px 380px;
+    gap: 25px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .calendar-content {
+    grid-template-columns: 1fr 300px 350px;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .calendar-content {
+    grid-template-columns: 1fr 280px 320px;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .calendar-content {
+    grid-template-columns: 1fr 250px 280px;
+    gap: 10px;
+  }
+}
+
+/* Custom scrollbar styling for pixel art theme */
+.sidebar::-webkit-scrollbar,
+.sectograph-column::-webkit-scrollbar,
+.calendar-grid-container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.sectograph-column::-webkit-scrollbar-track,
+.calendar-grid-container::-webkit-scrollbar-track {
+  background: var(--cream);
+  border: 1px solid var(--darker-orange);
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.sectograph-column::-webkit-scrollbar-thumb,
+.calendar-grid-container::-webkit-scrollbar-thumb {
+  background: var(--dark-orange);
+  border: 1px solid var(--black);
+  border-radius: 2px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover,
+.sectograph-column::-webkit-scrollbar-thumb:hover,
+.calendar-grid-container::-webkit-scrollbar-thumb:hover {
+  background: var(--darker-orange);
+}
+
+@media (max-width: 900px) {
+  .calendar-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto auto;
+    gap: 15px;
+  }
+
+  .calendar-container {
+    padding: 15px;
+    margin: 10px;
+  }
+
+  .calendar-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .calendar-header h1 {
+    font-size: 12px;
+  }
+
+  .calendar-day {
+    min-height: 50px;
+    padding: 6px;
+  }
+
+  .sidebar,
+  .sectograph-column {
+    max-height: 250px;
+    padding: 12px;
+  }
+}

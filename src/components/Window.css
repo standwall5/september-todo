@@ -1,0 +1,177 @@
+.window {
+  position: absolute;
+  background: var(--cream);
+  border-radius: 0;
+  box-shadow: 4px 4px 0px var(--black), inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+  border: 2px solid var(--black);
+  overflow: hidden;
+  transition: none;
+  user-select: none;
+  image-rendering: pixelated;
+}
+
+.centered-window {
+  position: fixed !important;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1400px;
+  height: calc(100vh - 160px);
+  max-height: 850px;
+  z-index: 1000;
+}
+
+.window.active {
+  box-shadow: 4px 4px 0px var(--dark-orange), inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+  border-color: var(--dark-orange);
+}
+
+.window-header {
+  height: 32px;
+  background: var(--light-yellow);
+  border-bottom: 2px solid var(--darker-orange);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  cursor: default;
+  position: relative;
+  box-shadow: inset 1px 1px 0px var(--white);
+}
+
+.window.active .window-header {
+  background: var(--dark-orange);
+  color: var(--white);
+  border-bottom-color: var(--darker-orange);
+}
+
+.window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control-btn {
+  width: 16px;
+  height: 16px;
+  border-radius: 0;
+  border: 2px solid var(--black);
+  cursor: pointer;
+  transition: none;
+  box-shadow: inset 1px 1px 0px var(--white),
+    inset -1px -1px 0px var(--darker-orange);
+}
+
+.control-btn.close {
+  background: var(--darker-orange);
+  position: relative;
+}
+
+.control-btn.close::before {
+  content: "×";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--white);
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.control-btn.close:hover {
+  background: var(--dark-orange);
+  box-shadow: inset -1px -1px 0px var(--white),
+    inset 1px 1px 0px var(--darker-orange);
+}
+
+.window-title {
+  flex: 1;
+  text-align: center;
+  font-weight: normal;
+  font-size: 8px;
+  color: inherit;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.window-spacer {
+  width: 68px; /* Same width as controls to center title */
+}
+
+.window-content {
+  height: calc(100% - 32px);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Remove the navigation bar from windowed mode */
+.window-content .navigation {
+  display: none;
+}
+
+/* Adjust content to fill the window */
+.window-content .todo-page,
+.window-content .calendar-page {
+  height: 100%;
+  border-radius: 0;
+}
+
+.window-content .todo-container,
+.window-content .calendar-container {
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
+  margin: 10px;
+  border-radius: 8px;
+}
+
+/* Window appears instantly without animation */
+.window {
+  opacity: 1;
+}
+
+/* Hover effects */
+.window:hover {
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.window.active:hover {
+  box-shadow: 0 30px 100px rgba(102, 126, 234, 0.5),
+    0 0 0 1px rgba(102, 126, 234, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.centered-window:hover {
+  transform: translate(-50%, -50%) translateY(-3px);
+}
+
+.centered-window.active:hover {
+  transform: translate(-50%, -50%) translateY(-3px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1500px) {
+  .centered-window {
+    width: 95vw !important;
+    height: calc(100vh - 100px) !important;
+    max-height: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .centered-window {
+    width: 98vw !important;
+    height: calc(100vh - 90px) !important;
+    max-height: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .centered-window {
+    width: 99vw !important;
+    height: calc(100vh - 80px) !important;
+    border-radius: 8px;
+  }
+}

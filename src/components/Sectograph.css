@@ -1,0 +1,150 @@
+.sectograph-container {
+  background: var(--cream);
+  border: 2px solid var(--darker-orange);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 20px;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange), 0 4px 10px rgba(0, 0, 0, 0.1);
+  image-rendering: pixelated;
+}
+
+.sectograph-header {
+  text-align: center;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--darker-orange);
+  padding-bottom: 12px;
+}
+
+.sectograph-header h3 {
+  margin: 0 0 4px 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sectograph-header p {
+  margin: 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  color: var(--darker-orange);
+}
+
+.sectograph-chart {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.sectograph-chart svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.sectograph-legend {
+  border-top: 2px solid var(--darker-orange);
+  padding-top: 12px;
+}
+
+.no-tasks {
+  text-align: center;
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  color: var(--darker-orange);
+  margin: 0;
+  padding: 16px;
+  text-transform: uppercase;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: var(--light-yellow);
+  border: 1px solid var(--darker-orange);
+  font-family: "Press Start 2P", monospace;
+  font-size: 6px;
+  transition: none;
+}
+
+.task-item.completed {
+  opacity: 0.6;
+}
+
+.task-color {
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--black);
+  flex-shrink: 0;
+}
+
+.task-time {
+  color: var(--darker-orange);
+  font-weight: bold;
+  min-width: 60px;
+}
+
+.task-text {
+  color: var(--black);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+}
+
+/* Scrollbar styling for task list */
+.task-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-list::-webkit-scrollbar-track {
+  background: var(--cream);
+  border: 1px solid var(--darker-orange);
+}
+
+.task-list::-webkit-scrollbar-thumb {
+  background: var(--darker-orange);
+  border: 1px solid var(--black);
+}
+
+.task-list::-webkit-scrollbar-thumb:hover {
+  background: var(--dark-orange);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sectograph-container {
+    margin: 10px;
+    padding: 12px;
+  }
+
+  .sectograph-chart svg {
+    width: 150px;
+    height: 150px;
+  }
+
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .task-time {
+    min-width: auto;
+  }
+}
