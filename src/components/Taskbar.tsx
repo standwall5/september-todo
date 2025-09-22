@@ -45,6 +45,126 @@ const Taskbar: React.FC<TaskbarProps> = ({
     localStorage.setItem("taskbarIconOrder", JSON.stringify(iconOrder));
   }, [iconOrder]);
 
+  // Magnetic animation function
+  const performMagneticAnimation = (fromX: number, fromY: number, targetIconId: string) => {
+    if (!draggedItem) return;
+
+    const draggedElement = document.querySelector(`[data-icon-id="${draggedItem}"]`) as HTMLElement;
+    const targetElement = document.querySelector(`[data-icon-id="${targetIconId}"]`) as HTMLElement;
+
+    if (draggedElement && targetElement) {
+      const targetRect = targetElement.getBoundingClientRect();
+      
+      // Create a clone at the drop position
+      const clone = draggedElement.cloneNode(true) as HTMLElement;
+      clone.classList.add("magnetic-clone");
+      clone.style.position = "fixed";
+      clone.style.left = `${fromX - 25}px`; // Center the clone on drop position
+      clone.style.top = `${fromY - 25}px`;
+      clone.style.width = "50px";
+      clone.style.height = "50px";
+      clone.style.zIndex = "10001";
+      clone.style.pointerEvents = "none";
+      
+      document.body.appendChild(clone);
+      
+      // Hide the original element temporarily
+      draggedElement.style.opacity = "0";
+      
+      // Animate the clone to the target position
+      requestAnimationFrame(() => {
+        clone.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        clone.style.left = `${targetRect.left}px`;
+        clone.style.top = `${targetRect.top}px`;
+        clone.style.width = `${targetRect.width}px`;
+        clone.style.height = `${targetRect.height}px`;
+        clone.style.transform = 'scale(1.2) rotate(360deg)';
+        
+        setTimeout(() => {
+          // Update the order
+          const currentIndex = iconOrder.indexOf(draggedItem);
+          const targetIndex = iconOrder.indexOf(targetIconId);
+          
+          const newOrder = [...iconOrder];
+          newOrder.splice(currentIndex, 1);
+          newOrder.splice(targetIndex, 0, draggedItem);
+          
+          setIconOrder(newOrder);
+          
+          // Clean up
+          document.body.removeChild(clone);
+          draggedElement.style.opacity = "";
+          
+          // Add final pop animation
+          setTimeout(() => {
+            const finalElement = document.querySelector(`[data-icon-id="${draggedItem}"]`) as HTMLElement;
+            if (finalElement) {
+              finalElement.classList.add("magnetic-pop");
+              setTimeout(() => {
+                finalElement.classList.remove("magnetic-pop");
+              }, 500);
+            }
+          }, 50);
+          
+        }, 600);
+      });
+    }
+  };
+
+  // Add global drop handler for anywhere drops
+  useEffect(() => {
+    const handleGlobalDrop = (e: DragEvent) => {
+      e.preventDefault();
+      if (!draggedItem) return;
+
+      // Get drop position
+      const dropX = e.clientX;
+      const dropY = e.clientY;
+
+      // Find closest taskbar icon position
+      const taskbarIcons = document.querySelectorAll('[data-icon-id]') as NodeListOf<HTMLElement>;
+      let closestIcon: HTMLElement | null = null;
+      let closestDistance = Infinity;
+
+      taskbarIcons.forEach((icon: HTMLElement) => {
+        const rect = icon.getBoundingClientRect();
+        const iconCenterX = rect.left + rect.width / 2;
+        const iconCenterY = rect.top + rect.height / 2;
+        
+        const distance = Math.sqrt(
+          Math.pow(dropX - iconCenterX, 2) + Math.pow(dropY - iconCenterY, 2)
+        );
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIcon = icon;
+        }
+      });
+
+      if (closestIcon !== null) {
+        const targetIconId = (closestIcon as HTMLElement).getAttribute('data-icon-id');
+        if (targetIconId && targetIconId !== draggedItem) {
+          performMagneticAnimation(dropX, dropY, targetIconId);
+        }
+      }
+
+      setDraggedItem(null);
+    };
+
+    const handleGlobalDragOver = (e: DragEvent) => {
+      e.preventDefault();
+      e.dataTransfer!.dropEffect = "move";
+    };
+
+    document.addEventListener('drop', handleGlobalDrop);
+    document.addEventListener('dragover', handleGlobalDragOver);
+
+    return () => {
+      document.removeEventListener('drop', handleGlobalDrop);
+      document.removeEventListener('dragover', handleGlobalDragOver);
+    };
+  }, [draggedItem, iconOrder, performMagneticAnimation]);
+
   const {
     playButtonClick,
     playButtonHover,
@@ -129,97 +249,7 @@ const Taskbar: React.FC<TaskbarProps> = ({
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-  };
 
-  const handleDragEnter = (e: React.DragEvent, iconId: string) => {
-    e.preventDefault();
-    if (draggedItem && draggedItem !== iconId) {
-      const targetElement = e.currentTarget as HTMLElement;
-      targetElement.classList.add("drag-over");
-    }
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    const targetElement = e.currentTarget as HTMLElement;
-    targetElement.classList.remove("drag-over");
-  };
-
-  const handleDrop = (e: React.DragEvent, targetIconId: string) => {
-    e.preventDefault();
-    if (!draggedItem || draggedItem === targetIconId) return;
-
-    // Get positions for magnetic animation
-    const draggedElement = document.querySelector(
-      `[data-icon-id="${draggedItem}"]`
-    ) as HTMLElement;
-    const targetElement = document.querySelector(
-      `[data-icon-id="${targetIconId}"]`
-    ) as HTMLElement;
-
-    if (draggedElement && targetElement) {
-      const draggedRect = draggedElement.getBoundingClientRect();
-      const targetRect = targetElement.getBoundingClientRect();
-
-      // Create a clone for the magnetic animation
-      const clone = draggedElement.cloneNode(true) as HTMLElement;
-      clone.classList.add("magnetic-clone");
-      clone.style.position = "fixed";
-      clone.style.left = `${draggedRect.left}px`;
-      clone.style.top = `${draggedRect.top}px`;
-      clone.style.width = `${draggedRect.width}px`;
-      clone.style.height = `${draggedRect.height}px`;
-      clone.style.zIndex = "10001";
-      clone.style.pointerEvents = "none";
-
-      document.body.appendChild(clone);
-
-      // Hide the original element temporarily
-      draggedElement.style.opacity = "0";
-
-      // Animate the clone to the target position
-      requestAnimationFrame(() => {
-        clone.style.transition =
-          "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-        clone.style.left = `${targetRect.left}px`;
-        clone.style.top = `${targetRect.top}px`;
-        clone.style.transform = "scale(1.2) rotate(360deg)";
-
-        setTimeout(() => {
-          // Update the order
-          const currentIndex = iconOrder.indexOf(draggedItem);
-          const targetIndex = iconOrder.indexOf(targetIconId);
-
-          const newOrder = [...iconOrder];
-          newOrder.splice(currentIndex, 1);
-          newOrder.splice(targetIndex, 0, draggedItem);
-
-          setIconOrder(newOrder);
-
-          // Clean up
-          document.body.removeChild(clone);
-          draggedElement.style.opacity = "";
-
-          // Add final pop animation
-          setTimeout(() => {
-            const finalElement = document.querySelector(
-              `[data-icon-id="${draggedItem}"]`
-            ) as HTMLElement;
-            if (finalElement) {
-              finalElement.classList.add("magnetic-pop");
-              setTimeout(() => {
-                finalElement.classList.remove("magnetic-pop");
-              }, 500);
-            }
-          }, 50);
-        }, 400);
-      });
-    }
-
-    setDraggedItem(null);
-  };
 
   const handleDragEnd = () => {
     setDraggedItem(null);
@@ -301,10 +331,6 @@ const Taskbar: React.FC<TaskbarProps> = ({
                 onMouseEnter={playButtonHover}
                 draggable
                 onDragStart={(e) => handleDragStart(e, iconId)}
-                onDragOver={handleDragOver}
-                onDragEnter={(e) => handleDragEnter(e, iconId)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, iconId)}
                 onDragEnd={handleDragEnd}
               >
                 {typeof config.icon === "string" &&

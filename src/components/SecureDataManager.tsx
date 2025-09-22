@@ -42,17 +42,34 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
 
     setIsProcessing(true);
     try {
-      // Gather all app data for export
+      // Gather ALL app data for comprehensive export
       const appData = {
+        // Core application data
         todos,
         tabGroups: JSON.parse(localStorage.getItem("bookmarkGroups") || "[]"),
+        tabManagerGroups: JSON.parse(localStorage.getItem("tabManagerGroups") || "[]"),
         notes: JSON.parse(localStorage.getItem("notes") || "[]"),
+        folders: JSON.parse(localStorage.getItem("folders") || "[]"),
+        
+        // User customizations
+        taskbarIconOrder: JSON.parse(localStorage.getItem("taskbarIconOrder") || "[]"),
+        
+        // Application settings
         settings: {
           hasSeenTutorial: localStorage.getItem("hasSeenTutorial"),
-          // Add other settings as needed
+          // Audio settings if they exist
+          isBgmMuted: localStorage.getItem("isBgmMuted"),
+          isSfxMuted: localStorage.getItem("isSfxMuted"),
+          // Theme settings if they exist
+          selectedTheme: localStorage.getItem("selectedTheme"),
+          // Any other preferences
+          userPreferences: JSON.parse(localStorage.getItem("userPreferences") || "{}"),
         },
-        exportVersion: "2.0", // Version for compatibility
+        
+        // Metadata
+        exportVersion: "3.0", // Updated version for comprehensive export
         exportDate: new Date().toISOString(),
+        dataTypes: ["todos", "bookmarks", "tabs", "notes", "folders", "taskbar", "settings"]
       };
 
       const secureExport = await SecurityManager.encryptData(appData, otp);
@@ -70,7 +87,7 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
       playTodoAdd();
       showMessage(
         "success",
-        `Comprehensive export created! Includes todos, bookmarks & settings. Valid for 5 minutes. Keep your OTP (${otp}) safe.`
+        `Comprehensive export created! Includes all your data: todos, bookmarks, notes, folders, taskbar layout & settings. Valid for 5 minutes. Keep your OTP (${otp}) safe.`
       );
     } catch (error) {
       showMessage(
@@ -108,42 +125,103 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
       }
 
       const importedData = await SecurityManager.decryptData(secureData, otp);
+      let importCounts = { todos: 0, bookmarks: 0, tabs: 0, notes: 0, folders: 0, settings: 0 };
 
       // Import todos
       if (importedData.todos && Array.isArray(importedData.todos)) {
         await importTodos(importedData.todos);
+        importCounts.todos = importedData.todos.length;
       }
 
-      // Import tab groups
+      // Import bookmark groups
       if (importedData.tabGroups && Array.isArray(importedData.tabGroups)) {
         localStorage.setItem(
           "bookmarkGroups",
           JSON.stringify(importedData.tabGroups)
         );
+        importCounts.bookmarks = importedData.tabGroups.length;
       }
 
-      // Import notes (when implemented)
+      // Import tab manager groups
+      if (importedData.tabManagerGroups && Array.isArray(importedData.tabManagerGroups)) {
+        localStorage.setItem(
+          "tabManagerGroups",
+          JSON.stringify(importedData.tabManagerGroups)
+        );
+        importCounts.tabs = importedData.tabManagerGroups.length;
+      }
+
+      // Import notes
       if (importedData.notes && Array.isArray(importedData.notes)) {
         localStorage.setItem("notes", JSON.stringify(importedData.notes));
+        importCounts.notes = importedData.notes.length;
       }
 
-      // Import settings
+      // Import folders
+      if (importedData.folders && Array.isArray(importedData.folders)) {
+        localStorage.setItem("folders", JSON.stringify(importedData.folders));
+        importCounts.folders = importedData.folders.length;
+      }
+
+      // Import taskbar customization
+      if (importedData.taskbarIconOrder && Array.isArray(importedData.taskbarIconOrder)) {
+        localStorage.setItem(
+          "taskbarIconOrder",
+          JSON.stringify(importedData.taskbarIconOrder)
+        );
+      }
+
+      // Import comprehensive settings
       if (importedData.settings) {
+        let settingsCount = 0;
+        
         if (importedData.settings.hasSeenTutorial) {
           localStorage.setItem(
             "hasSeenTutorial",
             importedData.settings.hasSeenTutorial
           );
+          settingsCount++;
         }
+
+        if (importedData.settings.isBgmMuted) {
+          localStorage.setItem("isBgmMuted", importedData.settings.isBgmMuted);
+          settingsCount++;
+        }
+
+        if (importedData.settings.isSfxMuted) {
+          localStorage.setItem("isSfxMuted", importedData.settings.isSfxMuted);
+          settingsCount++;
+        }
+
+        if (importedData.settings.selectedTheme) {
+          localStorage.setItem("selectedTheme", importedData.settings.selectedTheme);
+          settingsCount++;
+        }
+
+        if (importedData.settings.userPreferences && typeof importedData.settings.userPreferences === 'object') {
+          localStorage.setItem("userPreferences", JSON.stringify(importedData.settings.userPreferences));
+          settingsCount++;
+        }
+
+        importCounts.settings = settingsCount;
       }
 
       playTodoAdd();
-      showMessage(
-        "success",
-        `Successfully imported data! (${
-          importedData.todos?.length || 0
-        } todos, ${importedData.tabGroups?.length || 0} bookmark groups)`
-      );
+      
+      // Create comprehensive success message
+      const successParts = [];
+      if (importCounts.todos > 0) successParts.push(`${importCounts.todos} todos`);
+      if (importCounts.bookmarks > 0) successParts.push(`${importCounts.bookmarks} bookmark groups`);
+      if (importCounts.tabs > 0) successParts.push(`${importCounts.tabs} tab groups`);
+      if (importCounts.notes > 0) successParts.push(`${importCounts.notes} notes`);
+      if (importCounts.folders > 0) successParts.push(`${importCounts.folders} folders`);
+      if (importCounts.settings > 0) successParts.push(`${importCounts.settings} settings`);
+      
+      const successMessage = successParts.length > 0 
+        ? `Successfully imported: ${successParts.join(', ')}! Your taskbar customization and all preferences have been restored.`
+        : "Import completed! No data found to import.";
+        
+      showMessage("success", successMessage);
       setMode("menu");
     } catch (error) {
       showMessage(
@@ -210,12 +288,16 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
                   <li>• No cloud storage - your data stays local</li>
                 </ul>
 
-                <h3>📦 Export Includes</h3>
+                <h3>📦 Comprehensive Export Includes</h3>
                 <ul>
                   <li>• All todos and tasks</li>
                   <li>• Bookmark groups and URLs</li>
+                  <li>• Tab manager groups</li>
                   <li>• Notes and documents</li>
-                  <li>• App settings and preferences</li>
+                  <li>• Folder organization</li>
+                  <li>• Taskbar icon arrangement</li>
+                  <li>• Audio & theme preferences</li>
+                  <li>• Tutorial progress & settings</li>
                 </ul>
               </div>
 

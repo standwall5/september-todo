@@ -20,11 +20,21 @@ interface SecureExport {
 interface AppData {
   todos: any[];
   tabGroups?: any[];
+  tabManagerGroups?: any[];
   notes?: any[];
-  settings?: any;
+  folders?: any[];
+  taskbarIconOrder?: string[];
+  settings?: {
+    hasSeenTutorial?: string;
+    isBgmMuted?: string;
+    isSfxMuted?: string;
+    selectedTheme?: string;
+    userPreferences?: any;
+  };
   exportVersion?: string;
   exportDate: string;
   appVersion: string;
+  dataTypes?: string[];
 }
 
 export class SecurityManager {

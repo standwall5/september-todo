@@ -106,7 +106,11 @@ const AppContent: React.FC = () => {
         onOpenNotesManager={() => openWindow("notes")}
       />
 
-      <Tutorial isVisible={showTutorial} onComplete={handleTutorialComplete} />
+      <Tutorial 
+        isVisible={showTutorial} 
+        onClose={() => setShowTutorial(false)}
+        onComplete={handleTutorialComplete} 
+      />
     </div>
   );
 };
