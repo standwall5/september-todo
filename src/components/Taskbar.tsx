@@ -8,6 +8,8 @@ interface TaskbarProps {
   onStartTutorial: () => void;
   onStartPomodoro: () => void;
   onOpenSecureManager: () => void;
+  onOpenTabManager: () => void;
+  onOpenNotesManager: () => void;
 }
 
 const Taskbar: React.FC<TaskbarProps> = ({
@@ -16,6 +18,8 @@ const Taskbar: React.FC<TaskbarProps> = ({
   onStartTutorial,
   onStartPomodoro,
   onOpenSecureManager,
+  onOpenTabManager,
+  onOpenNotesManager,
 }) => {
   const [clickedButton, setClickedButton] = useState<string | null>(null);
 
@@ -82,6 +86,20 @@ const Taskbar: React.FC<TaskbarProps> = ({
       onOpenSecureManager();
     });
   };
+
+  const handleOpenTabManager = () => {
+    handleButtonClick("tabs", () => {
+      playButtonClick();
+      onOpenTabManager();
+    });
+  };
+
+  const handleOpenNotesManager = () => {
+    handleButtonClick("notes", () => {
+      playButtonClick();
+      onOpenNotesManager();
+    });
+  };
   return (
     <div className="taskbar">
       <div className="taskbar-start">
@@ -100,7 +118,11 @@ const Taskbar: React.FC<TaskbarProps> = ({
             onClick={handleCreateTodo}
             onMouseEnter={playButtonHover}
           >
-            <span className="launcher-icon">📝</span>
+            <img
+              src="https://art.pixilart.com/8b694d265d632ab.png"
+              alt="Todo"
+              className="launcher-icon"
+            />
             <span className="launcher-label">Todos</span>
           </button>
           <button
@@ -110,7 +132,11 @@ const Taskbar: React.FC<TaskbarProps> = ({
             onClick={handleCreateCalendar}
             onMouseEnter={playButtonHover}
           >
-            <span className="launcher-icon">📅</span>
+            <img
+              src="https://art.pixilart.com/thumb/sr25f645d0471a8.png"
+              alt="Calendar"
+              className="launcher-icon"
+            />
             <span className="launcher-label">Calendar</span>
           </button>
           <button
@@ -130,7 +156,11 @@ const Taskbar: React.FC<TaskbarProps> = ({
             onClick={handleStartPomodoro}
             onMouseEnter={playButtonHover}
           >
-            <span className="launcher-icon">💚</span>
+            <img
+              src="https://art.pixilart.com/7ae9042b0e1cbcd.png"
+              alt="Focus"
+              className="launcher-icon"
+            />
             <span className="launcher-label">Focus</span>
           </button>
           <button
@@ -140,8 +170,40 @@ const Taskbar: React.FC<TaskbarProps> = ({
             onClick={handleOpenSecureManager}
             onMouseEnter={playButtonHover}
           >
-            <span className="launcher-icon">🔒</span>
+            <img
+              src="https://static.thenounproject.com/png/644041-200.png"
+              alt="Secure"
+              className="launcher-icon"
+            />
             <span className="launcher-label">Secure</span>
+          </button>
+          <button
+            className={`launcher-btn tabs-launcher ${
+              clickedButton === "tabs" ? "clicked" : ""
+            }`}
+            onClick={handleOpenTabManager}
+            onMouseEnter={playButtonHover}
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/1828/1828925.png"
+              alt="Tabs"
+              className="launcher-icon"
+            />
+            <span className="launcher-label">Tabs</span>
+          </button>
+          <button
+            className={`launcher-btn notes-launcher ${
+              clickedButton === "notes" ? "clicked" : ""
+            }`}
+            onClick={handleOpenNotesManager}
+            onMouseEnter={playButtonHover}
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/2541/2541988.png"
+              alt="Notes"
+              className="launcher-icon"
+            />
+            <span className="launcher-label">Notes</span>
           </button>
         </div>
       </div>

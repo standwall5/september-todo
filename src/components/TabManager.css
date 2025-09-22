@@ -1,0 +1,346 @@
+/* Tab Manager specific styles - uses ModalWindow.css for base structure */
+
+/* Groups View */
+.create-group-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--darker-orange);
+}
+
+.group-name-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid var(--black);
+  background: var(--white);
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  box-shadow: inset 2px 2px 0px var(--darker-orange),
+    inset -2px -2px 0px var(--white);
+}
+
+.create-group-btn {
+  padding: 8px 16px;
+  background: var(--dark-orange);
+  color: var(--white);
+  border: 2px solid var(--black);
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.create-group-btn:hover {
+  box-shadow: inset -2px -2px 0px var(--white),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.group-card {
+  background: var(--light-yellow);
+  border: 3px solid var(--black);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 4px 4px 0px var(--black), inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.group-name {
+  margin: 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  color: var(--black);
+  text-transform: uppercase;
+}
+
+.group-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.group-control-btn {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--black);
+  cursor: pointer;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 1px 1px 0px var(--white),
+    inset -1px -1px 0px var(--darker-orange);
+}
+
+.edit-btn {
+  background: var(--cream);
+}
+
+.delete-btn {
+  background: var(--darker-orange);
+}
+
+.group-control-btn:hover {
+  box-shadow: inset -1px -1px 0px var(--white),
+    inset 1px 1px 0px var(--darker-orange);
+}
+
+.group-info {
+  margin-bottom: 12px;
+}
+
+.url-count {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  color: var(--darker-orange);
+}
+
+.group-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.group-action-btn {
+  flex: 1;
+  padding: 6px 12px;
+  border: 2px solid var(--black);
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.view-btn {
+  background: var(--cream);
+  color: var(--black);
+}
+
+.open-btn {
+  background: var(--dark-orange);
+  color: var(--white);
+}
+
+.group-action-btn:hover {
+  box-shadow: inset -2px -2px 0px var(--white),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+/* Edit View */
+.add-url-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--darker-orange);
+}
+
+.url-input {
+  padding: 8px 12px;
+  border: 2px solid var(--black);
+  background: var(--white);
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  box-shadow: inset 2px 2px 0px var(--darker-orange),
+    inset -2px -2px 0px var(--white);
+}
+
+.add-url-btn {
+  padding: 8px 16px;
+  background: var(--dark-orange);
+  color: var(--white);
+  border: 2px solid var(--black);
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  align-self: flex-start;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.add-url-btn:hover {
+  box-shadow: inset -2px -2px 0px var(--white),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+.urls-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.url-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: var(--light-yellow);
+  border: 2px solid var(--black);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px var(--black), inset 1px 1px 0px var(--white),
+    inset -1px -1px 0px var(--darker-orange);
+}
+
+.url-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.url-title {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  color: var(--black);
+  font-weight: bold;
+}
+
+.url-address {
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  color: var(--darker-orange);
+}
+
+.remove-url-btn {
+  width: 20px;
+  height: 20px;
+  background: var(--darker-orange);
+  color: var(--white);
+  border: 2px solid var(--black);
+  cursor: pointer;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 1px 1px 0px var(--white),
+    inset -1px -1px 0px var(--darker-orange);
+}
+
+.remove-url-btn:hover {
+  box-shadow: inset -1px -1px 0px var(--white),
+    inset 1px 1px 0px var(--darker-orange);
+}
+
+/* URLs View */
+.urls-header {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--darker-orange);
+  text-align: center;
+}
+
+.url-info {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  color: var(--darker-orange);
+  margin: 4px 0 0 0;
+  text-align: center;
+}
+
+.urls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.url-card {
+  background: var(--light-yellow);
+  border: 2px solid var(--black);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: none;
+  box-shadow: 2px 2px 0px var(--black), inset 1px 1px 0px var(--white),
+    inset -1px -1px 0px var(--darker-orange);
+}
+
+.url-card:hover {
+  box-shadow: inset -2px -2px 0px var(--white),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+.url-card-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.url-card-title {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  color: var(--black);
+  font-weight: bold;
+}
+
+.url-card-domain {
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  color: var(--darker-orange);
+}
+
+.back-btn {
+  padding: 8px 16px;
+  background: var(--cream);
+  color: var(--black);
+  border: 2px solid var(--black);
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.back-btn:hover {
+  box-shadow: inset -2px -2px 0px var(--white),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tab-manager-window {
+    width: 95%;
+    height: 90%;
+  }
+
+  .groups-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .create-group-section {
+    flex-direction: column;
+  }
+
+  .add-url-section {
+    gap: 12px;
+  }
+
+  .group-actions {
+    flex-direction: column;
+  }
+
+  .urls-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,152 @@
+/* Shared window/modal styling for consistent appearance across all components */
+
+/* Standard overlay pattern for all modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-3vh);
+  z-index: 10000;
+  backdrop-filter: blur(3px);
+}
+
+/* Standard window container pattern */
+.modal-window {
+  background: var(--cream);
+  border: 4px solid var(--black);
+  border-radius: 16px;
+  box-shadow: 8px 8px 0px var(--black), inset 4px 4px 0px var(--white),
+    inset -4px -4px 0px var(--darker-orange);
+  overflow: hidden;
+  image-rendering: pixelated;
+  display: flex;
+  flex-direction: column;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+/* Standard modal window sizes */
+.modal-window.size-small {
+  width: 400px;
+  max-height: 500px;
+}
+
+.modal-window.size-medium {
+  width: 600px;
+  max-height: 700px;
+}
+
+.modal-window.size-large {
+  width: 900px;
+  max-height: 600px;
+}
+
+/* Standard window header pattern */
+.modal-header {
+  background: var(--dark-orange);
+  color: var(--white);
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--black);
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+  min-height: 32px;
+}
+
+.modal-title {
+  margin: 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  flex: 1;
+}
+
+/* Standard header controls */
+.modal-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Standard close button */
+.modal-close-btn {
+  background: var(--darker-orange);
+  color: var(--white);
+  border: 2px solid var(--black);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Press Start 2P", monospace;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: none;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.modal-close-btn:hover {
+  box-shadow: inset -2px -2px 0px var(--white),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+/* Standard content area */
+.modal-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Responsive behavior */
+@media (max-width: 1024px) {
+  .modal-window {
+    width: 95vw;
+    height: 90vh;
+    max-width: none;
+    max-height: none;
+  }
+
+  .modal-window.size-small,
+  .modal-window.size-medium,
+  .modal-window.size-large {
+    width: 95vw;
+    height: 90vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-window {
+    width: 98vw;
+    height: 95vh;
+    border-radius: 8px;
+  }
+
+  .modal-header {
+    padding: 12px 16px;
+  }
+
+  .modal-title {
+    font-size: 10px;
+  }
+
+  .modal-close-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .modal-content {
+    padding: 16px;
+  }
+}

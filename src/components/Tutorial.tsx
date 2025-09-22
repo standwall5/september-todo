@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./ModalWindow.css";
 import "./Tutorial.css";
 
 interface TutorialStep {
@@ -74,8 +75,24 @@ export const Tutorial: React.FC<TutorialProps> = ({
   const step = tutorialSteps[currentStep];
 
   return (
-    <div className="tutorial-overlay">
-      <div className="tutorial-dialogue">
+    <div className="tutorial-dialogue">
+      <div className="tutorial-header">
+        <h2 className="tutorial-title">{step.title}</h2>
+        <div className="tutorial-controls">
+          <div className="step-indicator">
+            Step {currentStep + 1} of {tutorialSteps.length}
+          </div>
+          <button
+            className="tutorial-close-btn"
+            onClick={handleSkip}
+            title="Close Tutorial"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+
+      <div className="tutorial-content">
         <div className="wizard-portrait">
           <img
             src="https://64.media.tumblr.com/28bcdd634a990320b37172620c4df284/4367169f797b42ff-74/s500x750/7906e92d1dc71d8c572d9758facd38cdcf492f11.png"
@@ -85,22 +102,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
         </div>
 
         <div className="dialogue-content">
-          <div className="dialogue-header">
-            <h3 className="dialogue-title">{step.title}</h3>
-            <div className="header-controls">
-              <div className="step-indicator">
-                Step {currentStep + 1} of {tutorialSteps.length}
-              </div>
-              <button
-                className="tutorial-close-btn"
-                onClick={handleSkip}
-                title="Close Tutorial"
-              >
-                ×
-              </button>
-            </div>
-          </div>
-
           <div className="dialogue-message">
             <p>{step.message}</p>
           </div>

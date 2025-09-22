@@ -249,9 +249,13 @@
 
 .sidebar-empty {
   text-align: center;
-  color: #999;
-  font-style: italic;
+  color: var(--darker-orange);
+  font-style: normal;
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  text-transform: uppercase;
   padding: 40px 20px;
+  line-height: 1.6;
 }
 
 .sidebar-todo-item {
@@ -259,29 +263,38 @@
   align-items: center;
   gap: 10px;
   padding: 12px;
-  background: white;
-  border-radius: 8px;
+  background: var(--white);
+  border: 2px solid var(--darker-orange);
+  border-radius: 0;
   margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 2px 2px 0px var(--cream),
+    inset -2px -2px 0px var(--darker-orange);
 }
 
 .sidebar-todo-item.completed {
   opacity: 0.6;
+  background: var(--cream);
 }
 
 .sidebar-todo-checkbox {
   width: 16px;
   height: 16px;
+  border: 2px solid var(--darker-orange);
+  border-radius: 0;
 }
 
 .sidebar-todo-text {
   flex: 1;
-  font-size: 14px;
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+  color: var(--black);
+  text-transform: uppercase;
+  line-height: 1.4;
 }
 
 .sidebar-todo-item.completed .sidebar-todo-text {
   text-decoration: line-through;
-  color: #6c757d;
+  color: var(--darker-orange);
 }
 
 @media (max-width: 1600px) {

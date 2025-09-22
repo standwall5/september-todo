@@ -17,8 +17,12 @@ interface SecureExport {
   version: string;
 }
 
-interface TodoData {
+interface AppData {
   todos: any[];
+  tabGroups?: any[];
+  notes?: any[];
+  settings?: any;
+  exportVersion?: string;
   exportDate: string;
   appVersion: string;
 }
@@ -100,14 +104,11 @@ export class SecurityManager {
   /**
    * Encrypts todo data with OTP
    */
-  static async encryptData(
-    todoData: any[],
-    otp: string
-  ): Promise<SecureExport> {
+  static async encryptData(appData: any, otp: string): Promise<SecureExport> {
     try {
-      const data: TodoData = {
-        todos: todoData,
-        exportDate: new Date().toISOString(),
+      const data: AppData = {
+        ...appData,
+        exportDate: appData.exportDate || new Date().toISOString(),
         appVersion: this.VERSION,
       };
 
@@ -153,7 +154,7 @@ export class SecurityManager {
   static async decryptData(
     secureExport: SecureExport,
     otp: string
-  ): Promise<any[]> {
+  ): Promise<AppData> {
     try {
       // Check if data has expired
       if (Date.now() > secureExport.expiresAt) {
@@ -196,14 +197,14 @@ export class SecurityManager {
         );
       }
 
-      const data: TodoData = JSON.parse(decryptedString);
+      const data: AppData = JSON.parse(decryptedString);
 
       // Additional validation
       if (!Array.isArray(data.todos)) {
         throw new Error("Invalid data format detected.");
       }
 
-      return data.todos;
+      return data;
     } catch (error) {
       if (error instanceof Error) {
         throw error;

@@ -1,51 +1,24 @@
-.pomodoro-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10002;
-  backdrop-filter: blur(4px);
-}
+/* Pomodoro specific styles - uses ModalWindow.css for base structure */
 
-.pomodoro-container {
-  background: var(--cream);
-  border: 4px solid var(--black);
-  border-radius: 16px;
-  padding: 30px;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 8px 8px 0px var(--black), inset 4px 4px 0px var(--white),
-    inset -4px -4px 0px var(--darker-orange);
-  image-rendering: pixelated;
+/* Center the content within the modal */
+.modal-window .modal-content {
   text-align: center;
 }
 
-.pomodoro-header {
+/* Windowed pomodoro content */
+.pomodoro-content {
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 2px solid var(--darker-orange);
-  padding-bottom: 15px;
+  flex-direction: column;
+  background: var(--cream);
 }
 
-.pomodoro-header h2 {
-  margin: 0;
-  color: var(--black);
-  font-family: "Press Start 2P", monospace;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.header-controls {
+.pomodoro-window {
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 }
 
 .settings-btn {

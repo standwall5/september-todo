@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAudio } from "../hooks/useAudio";
+import "./ModalWindow.css";
 import "./Pomodoro.css";
 
 interface PomodoroProps {
@@ -158,11 +159,11 @@ export const Pomodoro: React.FC<PomodoroProps> = ({ isVisible, onClose }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="pomodoro-overlay">
-      <div className="pomodoro-container">
-        <div className="pomodoro-header">
-          <h2>Pomodoro Timer</h2>
-          <div className="header-controls">
+    <div className="modal-overlay">
+      <div className="modal-window size-medium">
+        <div className="modal-header">
+          <h2 className="modal-title">Pomodoro Timer</h2>
+          <div className="modal-controls">
             <button
               className="settings-btn"
               onClick={toggleSettings}
@@ -172,7 +173,7 @@ export const Pomodoro: React.FC<PomodoroProps> = ({ isVisible, onClose }) => {
               ⚙️
             </button>
             <button
-              className="close-btn"
+              className="modal-close-btn"
               onClick={onClose}
               onMouseEnter={playButtonHover}
             >
@@ -181,164 +182,172 @@ export const Pomodoro: React.FC<PomodoroProps> = ({ isVisible, onClose }) => {
           </div>
         </div>
 
-        {showSettings && (
-          <div className="pomodoro-settings">
-            <h3>Timer Presets</h3>
-            <div className="preset-buttons">
-              <button
-                className="preset-btn"
-                onClick={() => handlePresetTime(25)}
-                onMouseEnter={playButtonHover}
-                disabled={isActive}
-              >
-                25 min
-              </button>
-              <button
-                className="preset-btn"
-                onClick={() => handlePresetTime(15)}
-                onMouseEnter={playButtonHover}
-                disabled={isActive}
-              >
-                15 min
-              </button>
-              <button
-                className="preset-btn"
-                onClick={() => handlePresetTime(5)}
-                onMouseEnter={playButtonHover}
-                disabled={isActive}
-              >
-                5 min
-              </button>
-              <button
-                className="preset-btn"
-                onClick={() => handlePresetTime(1)}
-                onMouseEnter={playButtonHover}
-                disabled={isActive}
-              >
-                1 min
-              </button>
-            </div>
-
-            <div className="custom-timer">
-              <label>Custom (1-120 min):</label>
-              <div className="custom-input-group">
-                <input
-                  type="number"
-                  value={customTime}
-                  onChange={(e) => setCustomTime(e.target.value)}
-                  min="1"
-                  max="120"
-                  className="custom-time-input"
-                  disabled={isActive}
-                />
+        <div className="modal-content">
+          {showSettings && (
+            <div className="pomodoro-settings">
+              <h3>Timer Presets</h3>
+              <div className="preset-buttons">
                 <button
-                  className="set-btn"
-                  onClick={handleCustomTime}
+                  className="preset-btn"
+                  onClick={() => handlePresetTime(25)}
                   onMouseEnter={playButtonHover}
                   disabled={isActive}
                 >
-                  Set
+                  25 min
+                </button>
+                <button
+                  className="preset-btn"
+                  onClick={() => handlePresetTime(15)}
+                  onMouseEnter={playButtonHover}
+                  disabled={isActive}
+                >
+                  15 min
+                </button>
+                <button
+                  className="preset-btn"
+                  onClick={() => handlePresetTime(5)}
+                  onMouseEnter={playButtonHover}
+                  disabled={isActive}
+                >
+                  5 min
+                </button>
+                <button
+                  className="preset-btn"
+                  onClick={() => handlePresetTime(1)}
+                  onMouseEnter={playButtonHover}
+                  disabled={isActive}
+                >
+                  1 min
                 </button>
               </div>
+
+              <div className="custom-timer">
+                <label>Custom (1-120 min):</label>
+                <div className="custom-input-group">
+                  <input
+                    type="number"
+                    value={customTime}
+                    onChange={(e) => setCustomTime(e.target.value)}
+                    min="1"
+                    max="120"
+                    className="custom-time-input"
+                    disabled={isActive}
+                  />
+                  <button
+                    className="set-btn"
+                    onClick={handleCustomTime}
+                    onMouseEnter={playButtonHover}
+                    disabled={isActive}
+                  >
+                    Set
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <div className="pomodoro-heart-container">
-          <svg
-            width="200"
-            height="180"
-            viewBox="0 0 200 180"
-            className={`pomodoro-heart ${showGlow ? "glowing" : ""} ${
-              isComplete ? "complete" : ""
-            }`}
-          >
-            {/* Heart path definition */}
-            <defs>
-              <clipPath id="heartClip">
-                <path d="M100,160 C80,130 20,100 20,60 C20,30 40,10 70,10 C85,10 100,20 100,20 C100,20 115,10 130,10 C160,10 180,30 180,60 C180,100 120,130 100,160 Z" />
-              </clipPath>
-
-              {/* Gradient for the fill */}
-              <linearGradient id="heartFill" x1="0%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stopColor="#4ade80" />
-                <stop offset="100%" stopColor="#22c55e" />
-              </linearGradient>
-            </defs>
-
-            {/* Heart outline */}
-            <path
-              d="M100,160 C80,130 20,100 20,60 C20,30 40,10 70,10 C85,10 100,20 100,20 C100,20 115,10 130,10 C160,10 180,30 180,60 C180,100 120,130 100,160 Z"
-              fill="none"
-              stroke="var(--black)"
-              strokeWidth="4"
-            />
-
-            {/* Heart fill - animated based on timer */}
-            <rect
-              x="0"
-              y={180 - fillPercentage * 1.8}
+          <div className="pomodoro-heart-container">
+            <svg
               width="200"
-              height={fillPercentage * 1.8}
-              fill="url(#heartFill)"
-              clipPath="url(#heartClip)"
-              className="heart-fill"
-            />
-
-            {/* Inner heart outline for pixel effect */}
-            <path
-              d="M100,160 C80,130 20,100 20,60 C20,30 40,10 70,10 C85,10 100,20 100,20 C100,20 115,10 130,10 C160,10 180,30 180,60 C180,100 120,130 100,160 Z"
-              fill="none"
-              stroke="var(--darker-orange)"
-              strokeWidth="2"
-              strokeDasharray="4,2"
-            />
-          </svg>
-        </div>
-
-        <div className="pomodoro-display">
-          <div className="time-display">{formatTime(timeLeft)}</div>
-
-          {isComplete && (
-            <div className="completion-message">🎉 Pomodoro Complete! 🎉</div>
-          )}
-        </div>
-
-        <div className="pomodoro-controls">
-          {!isActive ? (
-            <button
-              className="pomodoro-btn start-btn"
-              onClick={handleStart}
-              onMouseEnter={playButtonHover}
-              disabled={isComplete}
+              height="180"
+              viewBox="0 0 200 180"
+              className={`pomodoro-heart ${showGlow ? "glowing" : ""} ${
+                isComplete ? "complete" : ""
+              }`}
             >
-              {timeLeft === 60 ? "Start" : "Resume"}
-            </button>
-          ) : (
+              {/* Heart path definition */}
+              <defs>
+                <clipPath id="heartClip">
+                  <path d="M100,160 C80,130 20,100 20,60 C20,30 40,10 70,10 C85,10 100,20 100,20 C100,20 115,10 130,10 C160,10 180,30 180,60 C180,100 120,130 100,160 Z" />
+                </clipPath>
+
+                {/* Gradient for the fill */}
+                <linearGradient
+                  id="heartFill"
+                  x1="0%"
+                  y1="100%"
+                  x2="0%"
+                  y2="0%"
+                >
+                  <stop offset="0%" stopColor="#4ade80" />
+                  <stop offset="100%" stopColor="#22c55e" />
+                </linearGradient>
+              </defs>
+
+              {/* Heart outline */}
+              <path
+                d="M100,160 C80,130 20,100 20,60 C20,30 40,10 70,10 C85,10 100,20 100,20 C100,20 115,10 130,10 C160,10 180,30 180,60 C180,100 120,130 100,160 Z"
+                fill="none"
+                stroke="var(--black)"
+                strokeWidth="4"
+              />
+
+              {/* Heart fill - animated based on timer */}
+              <rect
+                x="0"
+                y={180 - fillPercentage * 1.8}
+                width="200"
+                height={fillPercentage * 1.8}
+                fill="url(#heartFill)"
+                clipPath="url(#heartClip)"
+                className="heart-fill"
+              />
+
+              {/* Inner heart outline for pixel effect */}
+              <path
+                d="M100,160 C80,130 20,100 20,60 C20,30 40,10 70,10 C85,10 100,20 100,20 C100,20 115,10 130,10 C160,10 180,30 180,60 C180,100 120,130 100,160 Z"
+                fill="none"
+                stroke="var(--darker-orange)"
+                strokeWidth="2"
+                strokeDasharray="4,2"
+              />
+            </svg>
+          </div>
+
+          <div className="pomodoro-display">
+            <div className="time-display">{formatTime(timeLeft)}</div>
+
+            {isComplete && (
+              <div className="completion-message">🎉 Pomodoro Complete! 🎉</div>
+            )}
+          </div>
+
+          <div className="pomodoro-controls">
+            {!isActive ? (
+              <button
+                className="pomodoro-btn start-btn"
+                onClick={handleStart}
+                onMouseEnter={playButtonHover}
+                disabled={isComplete}
+              >
+                {timeLeft === 60 ? "Start" : "Resume"}
+              </button>
+            ) : (
+              <button
+                className="pomodoro-btn pause-btn"
+                onClick={handlePause}
+                onMouseEnter={playButtonHover}
+              >
+                Pause
+              </button>
+            )}
+
             <button
-              className="pomodoro-btn pause-btn"
-              onClick={handlePause}
+              className="pomodoro-btn reset-btn"
+              onClick={handleReset}
               onMouseEnter={playButtonHover}
             >
-              Pause
+              Reset
             </button>
-          )}
+          </div>
 
-          <button
-            className="pomodoro-btn reset-btn"
-            onClick={handleReset}
-            onMouseEnter={playButtonHover}
-          >
-            Reset
-          </button>
-        </div>
-
-        <div className="pomodoro-info">
-          <p>
-            Focus for {Math.ceil(originalTime / 60)} minute
-            {Math.ceil(originalTime / 60) !== 1 ? "s" : ""} and watch the heart
-            fill with productivity! 💚
-          </p>
+          <div className="pomodoro-info">
+            <p>
+              Focus for {Math.ceil(originalTime / 60)} minute
+              {Math.ceil(originalTime / 60) !== 1 ? "s" : ""} and watch the
+              heart fill with productivity! 💚
+            </p>
+          </div>
         </div>
       </div>
     </div>

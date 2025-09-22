@@ -7,18 +7,15 @@ import Taskbar from "./components/Taskbar";
 import { Tutorial } from "./components/Tutorial";
 import { Pomodoro } from "./components/Pomodoro";
 import { SecureDataManager } from "./components/SecureDataManager";
+import { TabManager } from "./components/TabManager";
+import { NotesManager } from "./components/NotesManager";
 import { useAudio } from "./hooks/useAudio";
 import "./App.css";
 
 const AppContent: React.FC = () => {
   const { todos, toggleTodo } = useTodoContext();
-  const [currentView, setCurrentView] = useState<"todo" | "calendar" | null>(
-    null
-  );
-  const [isMinimized, setIsMinimized] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
-  const [showPomodoro, setShowPomodoro] = useState(false);
-  const [showSecureManager, setShowSecureManager] = useState(false);
+  const [currentWindow, setCurrentWindow] = useState<string | null>(null);
 
   // Initialize audio system
   useAudio();
@@ -40,77 +37,53 @@ const AppContent: React.FC = () => {
     setShowTutorial(true);
   };
 
-  const startPomodoro = () => {
-    setShowPomodoro(true);
+  const openWindow = (windowType: string) => {
+    setCurrentWindow(windowType);
   };
 
-  const closePomodoro = () => {
-    setShowPomodoro(false);
-  };
-
-  const openSecureManager = () => {
-    setShowSecureManager(true);
-  };
-
-  const closeSecureManager = () => {
-    setShowSecureManager(false);
-  };
-
-  const openApp = (type: "todo" | "calendar") => {
-    setCurrentView(type);
-    setIsMinimized(false);
-  };
-
-  const closeApp = () => {
-    setCurrentView(null);
-    setIsMinimized(false);
-  };
-
-  const focusApp = () => {
-    if (currentView) {
-      setIsMinimized(false);
-    }
-  };
-
-  const getWindowTitle = () => {
-    if (!currentView) return "";
-    return currentView === "todo" ? "Todo Manager" : "Calendar View";
+  const closeWindow = () => {
+    setCurrentWindow(null);
   };
 
   return (
     <div className="desktop">
       <AnimatedBackground />
 
-      {currentView && (
-        <Window
-          title={getWindowTitle()}
-          isActive={!isMinimized}
-          isMinimized={isMinimized}
-          onFocus={focusApp}
-          onClose={closeApp}
-        >
-          {currentView === "todo" ? (
-            <TodoPage />
-          ) : (
-            <CalendarPage todos={todos} onToggleTodo={toggleTodo} />
-          )}
+      {/* Modal Components */}
+      {currentWindow === "todo" && (
+        <Window title="Todo Manager" isActive={true} onClose={closeWindow}>
+          <TodoPage />
         </Window>
+      )}
+      {currentWindow === "calendar" && (
+        <Window title="Calendar View" isActive={true} onClose={closeWindow}>
+          <CalendarPage todos={todos} onToggleTodo={toggleTodo} />
+        </Window>
+      )}
+      {currentWindow === "pomodoro" && (
+        <Pomodoro isVisible={true} onClose={closeWindow} />
+      )}
+      {currentWindow === "secure" && (
+        <SecureDataManager isVisible={true} onClose={closeWindow} />
+      )}
+      {currentWindow === "tabs" && (
+        <TabManager isVisible={true} onClose={closeWindow} />
+      )}
+      {currentWindow === "notes" && (
+        <NotesManager isVisible={true} onClose={closeWindow} />
       )}
 
       <Taskbar
-        onCreateTodo={() => openApp("todo")}
-        onCreateCalendar={() => openApp("calendar")}
+        onCreateTodo={() => openWindow("todo")}
+        onCreateCalendar={() => openWindow("calendar")}
         onStartTutorial={startTutorial}
-        onStartPomodoro={startPomodoro}
-        onOpenSecureManager={openSecureManager}
+        onStartPomodoro={() => openWindow("pomodoro")}
+        onOpenSecureManager={() => openWindow("secure")}
+        onOpenTabManager={() => openWindow("tabs")}
+        onOpenNotesManager={() => openWindow("notes")}
       />
 
       <Tutorial isVisible={showTutorial} onComplete={handleTutorialComplete} />
-      <Pomodoro isVisible={showPomodoro} onClose={closePomodoro} />
-      <SecureDataManager
-        isVisible={showSecureManager}
-        onClose={closeSecureManager}
-      />
     </div>
   );
 };

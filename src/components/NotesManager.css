@@ -1,0 +1,786 @@
+/* Main Layout */
+.notes-layout {
+  display: flex;
+  height: 100%;
+  gap: 0;
+}
+
+.notes-sidebar {
+  width: 300px;
+  min-width: 250px;
+  background: var(--cream);
+  border-right: 2px solid var(--darker-orange);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.notes-content {
+  flex: 1;
+  .markdown-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    pointer-events: none;
+    z-index: 1;
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--black);
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: left;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    margin: 0;
+    vertical-align: top;
+    transform: translateY(-8px);
+  }
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  display: flex;
+  gap: 8px;
+  padding: 15px;
+  border-bottom: 2px solid var(--darker-orange);
+  background: var(--light-yellow);
+}
+
+.new-note-btn {
+  background: var(--dark-orange);
+  color: var(--white);
+  border: 2px solid var(--black);
+  padding: 8px 12px;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  transition: none;
+  flex-shrink: 0;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.new-note-btn:hover {
+  box-shadow: inset -2px -2px 0px var(--white),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+/* Sidebar Search */
+.search-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid var(--darker-orange);
+  border-radius: 0;
+  background: var(--white);
+  color: var(--black);
+  font-size: 10px;
+  font-family: "Press Start 2P", monospace;
+  transition: none;
+  box-shadow: inset 2px 2px 0px var(--cream),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--dark-orange);
+  box-shadow: inset -2px -2px 0px var(--cream),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+/* Folder Section */
+.folder-section {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.folder-group {
+  margin-bottom: 5px;
+}
+
+.folder-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  color: var(--black);
+  font-weight: normal;
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  background: var(--light-yellow);
+  position: relative;
+  border: 1px solid var(--darker-orange);
+}
+
+.folder-header.clickable {
+  cursor: pointer;
+  transition: none;
+}
+
+.folder-header.clickable:hover {
+  background: var(--dark-orange);
+  color: var(--white);
+}
+
+.folder-header.unfiled {
+  background: var(--cream);
+  color: var(--darker-orange);
+}
+
+.folder-icon {
+  font-size: 12px;
+}
+
+.folder-name {
+  flex: 1;
+}
+
+.folder-count {
+  color: var(--darker-orange);
+  font-size: 6px;
+}
+
+.folder-add-btn {
+  background: transparent;
+  border: 1px solid var(--darker-orange);
+  color: var(--dark-orange);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 0;
+  font-size: 8px;
+  opacity: 0;
+  transition: none;
+  font-family: "Press Start 2P", monospace;
+}
+
+.folder-header:hover .folder-add-btn {
+  opacity: 1;
+}
+
+.folder-add-btn:hover {
+  background: var(--dark-orange);
+  color: var(--white);
+}
+
+.folder-notes {
+  background: var(--white);
+  border: 1px solid var(--darker-orange);
+}
+
+.note-item {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px 10px 35px;
+  border-bottom: 1px solid var(--cream);
+  cursor: pointer;
+  transition: none;
+  position: relative;
+  background: var(--white);
+}
+
+.note-item:hover {
+  background: var(--cream);
+}
+
+.note-item.selected {
+  background: var(--dark-orange);
+  color: var(--white);
+}
+
+.note-item-title {
+  font-weight: normal;
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+  margin-bottom: 4px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-transform: uppercase;
+}
+
+.note-item-date {
+  font-size: 6px;
+  opacity: 0.7;
+  font-family: "Press Start 2P", monospace;
+}
+
+.note-delete-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 1px solid var(--darker-orange);
+  color: var(--darker-orange);
+  cursor: pointer;
+  font-size: 8px;
+  opacity: 0;
+  transition: none;
+  padding: 4px;
+  border-radius: 0;
+  font-family: "Press Start 2P", monospace;
+}
+
+.note-item:hover .note-delete-btn {
+  opacity: 1;
+}
+
+.note-delete-btn:hover {
+  background: var(--darker-orange);
+  color: var(--white);
+}
+
+/* New Folder Section */
+.new-folder-section {
+  padding: 10px 15px;
+  border-top: 2px solid var(--darker-orange);
+}
+
+.new-folder-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--darker-orange);
+  color: var(--darker-orange);
+  padding: 8px 12px;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  transition: none;
+}
+
+.new-folder-btn:hover {
+  border-color: var(--dark-orange);
+  color: var(--dark-orange);
+  background: var(--cream);
+}
+
+.new-folder-input {
+  display: flex;
+  gap: 5px;
+}
+
+.new-folder-input input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 2px solid var(--darker-orange);
+  border-radius: 0;
+  background: var(--white);
+  color: var(--black);
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+}
+
+.new-folder-input button {
+  background: var(--dark-orange);
+  border: 2px solid var(--black);
+  color: var(--white);
+  padding: 6px 10px;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+}
+
+.new-folder-input button:last-child {
+  background: var(--darker-orange);
+}
+
+.new-folder-input button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Old styles removed - using new sidebar layout */
+
+/* Content Area */
+.welcome-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  color: var(--darker-orange);
+  padding: 40px;
+}
+
+.welcome-message h3 {
+  color: var(--dark-orange);
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0px var(--darker-orange);
+}
+
+.welcome-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.welcome-features li {
+  padding: 8px 0;
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+}
+
+/* Note Editor Container */
+.note-editor-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.note-editor-header {
+  display: flex;
+  gap: 15px;
+  padding: 15px 20px;
+  border-bottom: 2px solid var(--darker-orange);
+  background: var(--light-yellow);
+}
+
+.note-title-input {
+  flex: 2;
+  padding: 10px 15px;
+  border: 2px solid var(--darker-orange);
+  border-radius: 0;
+  background: var(--white);
+  color: var(--black);
+  font-size: 10px;
+  font-weight: normal;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  transition: none;
+  box-shadow: inset 2px 2px 0px var(--cream),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.note-title-input:focus {
+  outline: none;
+  border-color: var(--dark-orange);
+  box-shadow: inset -2px -2px 0px var(--cream),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+.note-folder-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 2px solid var(--darker-orange);
+  border-radius: 0;
+  background: var(--white);
+  color: var(--black);
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  transition: none;
+  box-shadow: inset 2px 2px 0px var(--cream),
+    inset -2px -2px 0px var(--darker-orange);
+}
+
+.note-folder-input:focus {
+  outline: none;
+  border-color: var(--dark-orange);
+  box-shadow: inset -2px -2px 0px var(--cream),
+    inset 2px 2px 0px var(--darker-orange);
+}
+
+/* Unified Editor Container */
+.unified-editor-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.unified-markdown-editor {
+  flex: 1;
+  width: 100%;
+  padding: 20px;
+  background: transparent;
+  border: 2px solid var(--darker-orange);
+  box-shadow: inset 2px 2px 0px var(--cream),
+    inset -2px -2px 0px var(--darker-orange);
+  color: var(--black);
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 1.8;
+  outline: none;
+  resize: none;
+  z-index: 10;
+  position: relative;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  vertical-align: top;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.unified-markdown-editor::placeholder {
+  color: var(--darker-orange);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.markdown-overlay {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  padding: 20px;
+  pointer-events: none;
+  z-index: 1;
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: transparent;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-align: left;
+}
+
+/* Smart cursor-based rendering */
+.unified-editor-container .unified-markdown-editor {
+  color: transparent;
+  caret-color: var(--black);
+  background: transparent;
+}
+
+.unified-editor-container .markdown-overlay {
+  color: var(--black);
+  opacity: 1;
+}
+
+/* Style the rendered elements in overlay */
+.markdown-overlay .h1-style {
+  color: var(--dark-orange) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 16px !important;
+  text-transform: uppercase !important;
+  border-bottom: 2px solid var(--dark-orange) !important;
+}
+
+.markdown-overlay .h2-style {
+  color: var(--darker-orange) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 14px !important;
+  text-transform: uppercase !important;
+}
+
+.markdown-overlay .h3-style {
+  color: var(--darker-orange) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+}
+
+.markdown-overlay .checklist-style {
+  color: var(--black) !important;
+}
+
+.markdown-overlay .checklist-checked-style {
+  color: var(--black) !important;
+  opacity: 0.7 !important;
+  text-decoration: line-through !important;
+}
+
+.markdown-overlay .list-style {
+  color: var(--black) !important;
+}
+
+.markdown-overlay strong {
+  font-weight: bold !important;
+  color: var(--black) !important;
+}
+
+.markdown-overlay em {
+  font-style: italic !important;
+  color: var(--darker-orange) !important;
+}
+
+.markdown-overlay code {
+  background: var(--light-yellow) !important;
+  color: var(--dark-orange) !important;
+  padding: 2px 4px !important;
+  border: 1px solid var(--darker-orange) !important;
+  border-radius: 0 !important;
+  font-family: "Consolas", "Monaco", "Courier New", monospace !important;
+  font-size: 12px !important;
+}
+
+/* Markdown Preview Styling */
+.markdown-preview h1 {
+  color: var(--dark-orange);
+  border-bottom: 2px solid var(--dark-orange);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.markdown-preview h2 {
+  color: var(--darker-orange);
+  margin: 20px 0 15px 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.markdown-preview h3 {
+  color: var(--darker-orange);
+  margin: 15px 0 10px 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.markdown-preview strong {
+  color: var(--black);
+  font-weight: bold;
+}
+
+.markdown-preview em {
+  color: var(--darker-orange);
+  font-style: italic;
+}
+
+.markdown-preview code {
+  background: var(--light-yellow);
+  color: var(--dark-orange);
+  padding: 3px 6px;
+  border-radius: 0;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  border: 1px solid var(--darker-orange);
+  font-size: 10px;
+}
+
+.markdown-preview ul {
+  margin: 15px 0;
+  padding-left: 0;
+}
+
+.markdown-preview li {
+  list-style: none;
+  position: relative;
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.markdown-preview li::before {
+  content: "•";
+  color: var(--dark-orange);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Editor Help Section */
+.editor-help-section {
+  display: flex;
+  gap: 20px;
+  padding: 10px 20px;
+  border-top: 2px solid var(--darker-orange);
+  background: var(--cream);
+}
+
+.help-section {
+  flex: 1;
+}
+
+.help-section summary {
+  cursor: pointer;
+  font-weight: normal;
+  color: var(--dark-orange);
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  padding: 5px 0;
+}
+
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 15px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--darker-orange);
+  font-size: 8px;
+  font-family: "Press Start 2P", monospace;
+}
+
+.shortcuts-grid kbd {
+  background: var(--light-yellow);
+  color: var(--dark-orange);
+  padding: 2px 6px;
+  border-radius: 0;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 7px;
+  border: 1px solid var(--darker-orange);
+  white-space: nowrap;
+}
+
+.syntax-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 15px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--darker-orange);
+}
+
+.syntax-grid code {
+  background: var(--light-yellow);
+  color: var(--dark-orange);
+  padding: 2px 6px;
+  border-radius: 0;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 7px;
+  border: 1px solid var(--darker-orange);
+}
+
+/* Old edit view styles removed - using new editor layout */
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .editor-and-preview {
+    flex-direction: column;
+  }
+
+  .editor-pane {
+    border-right: none;
+    border-bottom: 1px solid #404040;
+  }
+
+  .notes-sidebar {
+    width: 250px;
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .notes-layout {
+    flex-direction: column;
+  }
+
+  .notes-sidebar {
+    width: 100%;
+    height: 200px;
+    border-right: none;
+    border-bottom: 1px solid #404040;
+  }
+
+  .folder-section {
+    max-height: 150px;
+  }
+
+  .note-editor-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .syntax-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Modal Size Extension */
+.modal-window.size-large {
+  width: 90vw;
+  height: 85vh;
+  max-width: 1200px;
+  max-height: 800px;
+}
+
+@media (max-width: 768px) {
+  .modal-window.size-large {
+    width: 95vw;
+    height: 90vh;
+  }
+}
+
+/* Drag and Drop Styles */
+.note-item[draggable="true"] {
+  cursor: grab;
+  user-select: none;
+}
+
+.note-item[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.folder-header[draggable="true"] {
+  cursor: grab;
+  user-select: none;
+}
+
+.folder-header[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.folder-header.drag-over {
+  background-color: var(--light-yellow) !important;
+  border: 2px dashed var(--dark-orange) !important;
+  box-shadow: 0 0 0 2px var(--cream) !important;
+}
+
+.note-item:hover {
+  background-color: var(--cream);
+  border-color: var(--dark-orange);
+}
+
+.folder-header:hover {
+  background-color: var(--light-yellow);
+}
+
+/* Folder Hierarchy Styles */
+.folder-hierarchy {
+  color: var(--dark-orange);
+  margin-right: 4px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.folder-level-1 {
+  margin-left: 20px;
+}
+
+.folder-level-2 {
+  margin-left: 40px;
+}
+
+.folder-level-3 {
+  margin-left: 60px;
+}
+
+.folder-content {
+  border-left: 2px solid var(--light-yellow);
+  margin-left: 10px;
+}
+
+.folder-group .folder-group {
+  border-left: 1px dashed var(--darker-orange);
+  padding-left: 8px;
+}

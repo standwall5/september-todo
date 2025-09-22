@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { SecurityManager } from "../utils/SecurityManager";
 import { useTodoContext } from "../contexts/TodoContext";
 import { useAudio } from "../hooks/useAudio";
+import "./ModalWindow.css";
 import "./SecureDataManager.css";
 
 interface SecureDataManagerProps {
@@ -41,7 +42,20 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
 
     setIsProcessing(true);
     try {
-      const secureExport = await SecurityManager.encryptData(todos, otp);
+      // Gather all app data for export
+      const appData = {
+        todos,
+        tabGroups: JSON.parse(localStorage.getItem("bookmarkGroups") || "[]"),
+        notes: JSON.parse(localStorage.getItem("notes") || "[]"),
+        settings: {
+          hasSeenTutorial: localStorage.getItem("hasSeenTutorial"),
+          // Add other settings as needed
+        },
+        exportVersion: "2.0", // Version for compatibility
+        exportDate: new Date().toISOString(),
+      };
+
+      const secureExport = await SecurityManager.encryptData(appData, otp);
       const exportString = JSON.stringify(secureExport, null, 2);
 
       // Auto-download the file
@@ -56,7 +70,7 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
       playTodoAdd();
       showMessage(
         "success",
-        `Secure export created! Valid for 5 minutes. Keep your OTP (${otp}) safe.`
+        `Comprehensive export created! Includes todos, bookmarks & settings. Valid for 5 minutes. Keep your OTP (${otp}) safe.`
       );
     } catch (error) {
       showMessage(
@@ -93,13 +107,42 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
         throw new Error("This export has expired. Please create a new one.");
       }
 
-      const importedTodos = await SecurityManager.decryptData(secureData, otp);
-      await importTodos(importedTodos);
+      const importedData = await SecurityManager.decryptData(secureData, otp);
+
+      // Import todos
+      if (importedData.todos && Array.isArray(importedData.todos)) {
+        await importTodos(importedData.todos);
+      }
+
+      // Import tab groups
+      if (importedData.tabGroups && Array.isArray(importedData.tabGroups)) {
+        localStorage.setItem(
+          "bookmarkGroups",
+          JSON.stringify(importedData.tabGroups)
+        );
+      }
+
+      // Import notes (when implemented)
+      if (importedData.notes && Array.isArray(importedData.notes)) {
+        localStorage.setItem("notes", JSON.stringify(importedData.notes));
+      }
+
+      // Import settings
+      if (importedData.settings) {
+        if (importedData.settings.hasSeenTutorial) {
+          localStorage.setItem(
+            "hasSeenTutorial",
+            importedData.settings.hasSeenTutorial
+          );
+        }
+      }
 
       playTodoAdd();
       showMessage(
         "success",
-        `Successfully imported ${importedTodos.length} todos!`
+        `Successfully imported data! (${
+          importedData.todos?.length || 0
+        } todos, ${importedData.tabGroups?.length || 0} bookmark groups)`
       );
       setMode("menu");
     } catch (error) {
@@ -136,65 +179,149 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
   };
 
   return (
-    <div className="secure-manager-overlay">
-      <div className="secure-manager-container">
-        <div className="secure-manager-header">
-          <h2>🔒 Secure Data Manager</h2>
-          <button
-            className="close-btn"
-            onClick={onClose}
-            onMouseEnter={playButtonHover}
-          >
-            ×
-          </button>
+    <div className="modal-overlay">
+      <div className="modal-window size-medium">
+        <div className="modal-header">
+          <h2 className="modal-title">🔒 Secure Data Manager</h2>
+          <div className="modal-controls">
+            <button
+              className="modal-close-btn"
+              onClick={onClose}
+              onMouseEnter={playButtonHover}
+            >
+              ×
+            </button>
+          </div>
         </div>
 
-        {message && (
-          <div className={`message ${message.type}`}>{message.text}</div>
-        )}
+        <div className="modal-content">
+          {message && (
+            <div className={`message ${message.type}`}>{message.text}</div>
+          )}
 
-        {mode === "menu" && (
-          <div className="secure-menu">
-            <div className="security-info">
-              <h3>🛡️ Security Features</h3>
-              <ul>
-                <li>• AES-256 encryption with your OTP</li>
-                <li>• 5-minute expiry for maximum security</li>
-                <li>• Data integrity verification</li>
-                <li>• No cloud storage - your data stays local</li>
-              </ul>
+          {mode === "menu" && (
+            <div className="secure-menu">
+              <div className="security-info">
+                <h3>🛡️ Security Features</h3>
+                <ul>
+                  <li>• AES-256 encryption with your OTP</li>
+                  <li>• 5-minute expiry for maximum security</li>
+                  <li>• Data integrity verification</li>
+                  <li>• No cloud storage - your data stays local</li>
+                </ul>
+
+                <h3>📦 Export Includes</h3>
+                <ul>
+                  <li>• All todos and tasks</li>
+                  <li>• Bookmark groups and URLs</li>
+                  <li>• Notes and documents</li>
+                  <li>• App settings and preferences</li>
+                </ul>
+              </div>
+
+              <div className="action-buttons">
+                <button
+                  className="action-btn export-btn"
+                  onClick={() => setMode("export")}
+                  onMouseEnter={playButtonHover}
+                >
+                  📤 Export Todos
+                </button>
+                <button
+                  className="action-btn import-btn"
+                  onClick={() => setMode("import")}
+                  onMouseEnter={playButtonHover}
+                >
+                  📥 Import Todos
+                </button>
+              </div>
             </div>
+          )}
 
-            <div className="action-buttons">
-              <button
-                className="action-btn export-btn"
-                onClick={() => setMode("export")}
-                onMouseEnter={playButtonHover}
-              >
-                📤 Export Todos
-              </button>
-              <button
-                className="action-btn import-btn"
-                onClick={() => setMode("import")}
-                onMouseEnter={playButtonHover}
-              >
-                📥 Import Todos
-              </button>
+          {mode === "export" && (
+            <div className="export-section">
+              <h3>📤 Secure Export</h3>
+              <p>
+                Your todos will be encrypted with a 6-digit OTP and expire in 5
+                minutes.
+              </p>
+
+              <div className="otp-section">
+                <div className="otp-input-group">
+                  <label>Enter 6-digit OTP:</label>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) =>
+                      setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    }
+                    placeholder="123456"
+                    className="otp-input"
+                    maxLength={6}
+                  />
+                  <button
+                    className="generate-otp-btn"
+                    onClick={generateNewOTP}
+                    onMouseEnter={playButtonHover}
+                  >
+                    🎲 Generate
+                  </button>
+                </div>
+                {generatedOTP && (
+                  <div className="generated-otp">
+                    Generated OTP: <strong>{generatedOTP}</strong>
+                    <small>Keep this safe - you'll need it to import!</small>
+                  </div>
+                )}
+              </div>
+
+              <div className="action-buttons">
+                <button
+                  className="action-btn back-btn"
+                  onClick={resetForm}
+                  onMouseEnter={playButtonHover}
+                >
+                  ← Back
+                </button>
+                <button
+                  className="action-btn export-btn"
+                  onClick={handleExport}
+                  onMouseEnter={playButtonHover}
+                  disabled={isProcessing || !SecurityManager.validateOTP(otp)}
+                >
+                  {isProcessing ? "Encrypting..." : "🔐 Export"}
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {mode === "export" && (
-          <div className="export-section">
-            <h3>📤 Secure Export</h3>
-            <p>
-              Your todos will be encrypted with a 6-digit OTP and expire in 5
-              minutes.
-            </p>
+          {mode === "import" && (
+            <div className="import-section">
+              <h3>📥 Secure Import</h3>
+              <p>
+                Select your encrypted todo file and enter the OTP used during
+                export.
+              </p>
 
-            <div className="otp-section">
-              <div className="otp-input-group">
-                <label>Enter 6-digit OTP:</label>
+              <div className="file-input-section">
+                <label className="file-input-label">
+                  📁 Select Secure Export File
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleFileSelect}
+                    className="file-input"
+                  />
+                </label>
+                {importFile && (
+                  <div className="selected-file">
+                    Selected: {importFile.name}
+                  </div>
+                )}
+              </div>
+
+              <div className="otp-section">
+                <label>Enter your 6-digit OTP:</label>
                 <input
                   type="text"
                   value={otp}
@@ -205,106 +332,32 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
                   className="otp-input"
                   maxLength={6}
                 />
+              </div>
+
+              <div className="action-buttons">
                 <button
-                  className="generate-otp-btn"
-                  onClick={generateNewOTP}
+                  className="action-btn back-btn"
+                  onClick={resetForm}
                   onMouseEnter={playButtonHover}
                 >
-                  🎲 Generate
+                  ← Back
+                </button>
+                <button
+                  className="action-btn import-btn"
+                  onClick={handleImport}
+                  onMouseEnter={playButtonHover}
+                  disabled={
+                    isProcessing ||
+                    !importFile ||
+                    !SecurityManager.validateOTP(otp)
+                  }
+                >
+                  {isProcessing ? "Decrypting..." : "🔓 Import"}
                 </button>
               </div>
-              {generatedOTP && (
-                <div className="generated-otp">
-                  Generated OTP: <strong>{generatedOTP}</strong>
-                  <small>Keep this safe - you'll need it to import!</small>
-                </div>
-              )}
             </div>
-
-            <div className="action-buttons">
-              <button
-                className="action-btn back-btn"
-                onClick={resetForm}
-                onMouseEnter={playButtonHover}
-              >
-                ← Back
-              </button>
-              <button
-                className="action-btn export-btn"
-                onClick={handleExport}
-                onMouseEnter={playButtonHover}
-                disabled={isProcessing || !SecurityManager.validateOTP(otp)}
-              >
-                {isProcessing ? "Encrypting..." : "🔐 Export"}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {mode === "import" && (
-          <div className="import-section">
-            <h3>📥 Secure Import</h3>
-            <p>
-              Select your encrypted todo file and enter the OTP used during
-              export.
-            </p>
-
-            <div className="file-input-section">
-              <label className="file-input-label">
-                📁 Select Secure Export File
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleFileSelect}
-                  className="file-input"
-                />
-              </label>
-              {importFile && (
-                <div className="selected-file">Selected: {importFile.name}</div>
-              )}
-            </div>
-
-            <div className="otp-section">
-              <label>Enter your 6-digit OTP:</label>
-              <input
-                type="text"
-                value={otp}
-                onChange={(e) =>
-                  setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
-                }
-                placeholder="123456"
-                className="otp-input"
-                maxLength={6}
-              />
-            </div>
-
-            <div className="action-buttons">
-              <button
-                className="action-btn back-btn"
-                onClick={resetForm}
-                onMouseEnter={playButtonHover}
-              >
-                ← Back
-              </button>
-              <button
-                className="action-btn import-btn"
-                onClick={handleImport}
-                onMouseEnter={playButtonHover}
-                disabled={
-                  isProcessing ||
-                  !importFile ||
-                  !SecurityManager.validateOTP(otp)
-                }
-              >
-                {isProcessing ? "Decrypting..." : "🔓 Import"}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {message && (
-          <div className={`message ${message.type}`}>{message.text}</div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
