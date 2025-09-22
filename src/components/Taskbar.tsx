@@ -23,18 +23,18 @@ const Taskbar: React.FC<TaskbarProps> = ({
 }) => {
   const [clickedButton, setClickedButton] = useState<string | null>(null);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
-  
+
   // Default icon order
   const defaultIconOrder = [
     "todo",
-    "calendar", 
+    "calendar",
     "tutorial",
     "pomodoro",
     "secure",
     "tabs",
-    "notes"
+    "notes",
   ];
-  
+
   const [iconOrder, setIconOrder] = useState<string[]>(() => {
     const saved = localStorage.getItem("taskbarIconOrder");
     return saved ? JSON.parse(saved) : defaultIconOrder;
@@ -138,13 +138,13 @@ const Taskbar: React.FC<TaskbarProps> = ({
     e.preventDefault();
     if (draggedItem && draggedItem !== iconId) {
       const targetElement = e.currentTarget as HTMLElement;
-      targetElement.classList.add('drag-over');
+      targetElement.classList.add("drag-over");
     }
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
     const targetElement = e.currentTarget as HTMLElement;
-    targetElement.classList.remove('drag-over');
+    targetElement.classList.remove("drag-over");
   };
 
   const handleDrop = (e: React.DragEvent, targetIconId: string) => {
@@ -152,66 +152,72 @@ const Taskbar: React.FC<TaskbarProps> = ({
     if (!draggedItem || draggedItem === targetIconId) return;
 
     // Get positions for magnetic animation
-    const draggedElement = document.querySelector(`[data-icon-id="${draggedItem}"]`) as HTMLElement;
-    const targetElement = document.querySelector(`[data-icon-id="${targetIconId}"]`) as HTMLElement;
-    
+    const draggedElement = document.querySelector(
+      `[data-icon-id="${draggedItem}"]`
+    ) as HTMLElement;
+    const targetElement = document.querySelector(
+      `[data-icon-id="${targetIconId}"]`
+    ) as HTMLElement;
+
     if (draggedElement && targetElement) {
       const draggedRect = draggedElement.getBoundingClientRect();
       const targetRect = targetElement.getBoundingClientRect();
-      
+
       // Create a clone for the magnetic animation
       const clone = draggedElement.cloneNode(true) as HTMLElement;
-      clone.classList.add('magnetic-clone');
-      clone.style.position = 'fixed';
+      clone.classList.add("magnetic-clone");
+      clone.style.position = "fixed";
       clone.style.left = `${draggedRect.left}px`;
       clone.style.top = `${draggedRect.top}px`;
       clone.style.width = `${draggedRect.width}px`;
       clone.style.height = `${draggedRect.height}px`;
-      clone.style.zIndex = '10001';
-      clone.style.pointerEvents = 'none';
-      
+      clone.style.zIndex = "10001";
+      clone.style.pointerEvents = "none";
+
       document.body.appendChild(clone);
-      
+
       // Hide the original element temporarily
-      draggedElement.style.opacity = '0';
-      
+      draggedElement.style.opacity = "0";
+
       // Animate the clone to the target position
       requestAnimationFrame(() => {
-        clone.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        clone.style.transition =
+          "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
         clone.style.left = `${targetRect.left}px`;
         clone.style.top = `${targetRect.top}px`;
-        clone.style.transform = 'scale(1.2) rotate(360deg)';
-        
+        clone.style.transform = "scale(1.2) rotate(360deg)";
+
         setTimeout(() => {
           // Update the order
           const currentIndex = iconOrder.indexOf(draggedItem);
           const targetIndex = iconOrder.indexOf(targetIconId);
-          
+
           const newOrder = [...iconOrder];
           newOrder.splice(currentIndex, 1);
           newOrder.splice(targetIndex, 0, draggedItem);
-          
+
           setIconOrder(newOrder);
-          
+
           // Clean up
           document.body.removeChild(clone);
-          draggedElement.style.opacity = '';
-          
+          draggedElement.style.opacity = "";
+
           // Add final pop animation
           setTimeout(() => {
-            const finalElement = document.querySelector(`[data-icon-id="${draggedItem}"]`) as HTMLElement;
+            const finalElement = document.querySelector(
+              `[data-icon-id="${draggedItem}"]`
+            ) as HTMLElement;
             if (finalElement) {
-              finalElement.classList.add('magnetic-pop');
+              finalElement.classList.add("magnetic-pop");
               setTimeout(() => {
-                finalElement.classList.remove('magnetic-pop');
+                finalElement.classList.remove("magnetic-pop");
               }, 500);
             }
           }, 50);
-          
         }, 400);
       });
     }
-    
+
     setDraggedItem(null);
   };
 
@@ -226,50 +232,50 @@ const Taskbar: React.FC<TaskbarProps> = ({
       className: "todo-launcher",
       icon: "https://art.pixilart.com/8b694d265d632ab.png",
       label: "Todos",
-      alt: "Todo"
+      alt: "Todo",
     },
     calendar: {
       onClick: handleCreateCalendar,
-      className: "calendar-launcher", 
+      className: "calendar-launcher",
       icon: "https://art.pixilart.com/thumb/sr25f645d0471a8.png",
       label: "Calendar",
-      alt: "Calendar"
+      alt: "Calendar",
     },
     tutorial: {
       onClick: handleStartTutorial,
       className: "tutorial-launcher",
       icon: "🧙",
       label: "Help",
-      alt: "Tutorial"
+      alt: "Tutorial",
     },
     pomodoro: {
       onClick: handleStartPomodoro,
       className: "pomodoro-launcher",
-      icon: "https://art.pixilart.com/7ae9042b0e1cbcd.png", 
+      icon: "https://art.pixilart.com/7ae9042b0e1cbcd.png",
       label: "Focus",
-      alt: "Focus"
+      alt: "Focus",
     },
     secure: {
       onClick: handleOpenSecureManager,
       className: "security-launcher",
       icon: "https://static.thenounproject.com/png/644041-200.png",
-      label: "Secure", 
-      alt: "Secure"
+      label: "Secure",
+      alt: "Secure",
     },
     tabs: {
       onClick: handleOpenTabManager,
       className: "tabs-launcher",
       icon: "https://cdn-icons-png.flaticon.com/512/1828/1828925.png",
       label: "Tabs",
-      alt: "Tabs"
+      alt: "Tabs",
     },
     notes: {
       onClick: handleOpenNotesManager,
       className: "notes-launcher",
       icon: "https://cdn-icons-png.flaticon.com/512/2541/2541988.png",
       label: "Notes",
-      alt: "Notes"
-    }
+      alt: "Notes",
+    },
   };
   return (
     <div className="taskbar">
@@ -301,7 +307,8 @@ const Taskbar: React.FC<TaskbarProps> = ({
                 onDrop={(e) => handleDrop(e, iconId)}
                 onDragEnd={handleDragEnd}
               >
-                {typeof config.icon === "string" && config.icon.startsWith("http") ? (
+                {typeof config.icon === "string" &&
+                config.icon.startsWith("http") ? (
                   <img
                     src={config.icon}
                     alt={config.alt}
