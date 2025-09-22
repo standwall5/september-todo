@@ -15,7 +15,7 @@ export const Pomodoro: React.FC<PomodoroProps> = ({ isVisible, onClose }) => {
   const [isComplete, setIsComplete] = useState(false);
   const [showGlow, setShowGlow] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const { playTodoComplete, playButtonClick, playButtonHover } = useAudio();
 
