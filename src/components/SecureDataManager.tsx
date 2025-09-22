@@ -47,13 +47,17 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
         // Core application data
         todos,
         tabGroups: JSON.parse(localStorage.getItem("bookmarkGroups") || "[]"),
-        tabManagerGroups: JSON.parse(localStorage.getItem("tabManagerGroups") || "[]"),
+        tabManagerGroups: JSON.parse(
+          localStorage.getItem("tabManagerGroups") || "[]"
+        ),
         notes: JSON.parse(localStorage.getItem("notes") || "[]"),
         folders: JSON.parse(localStorage.getItem("folders") || "[]"),
-        
+
         // User customizations
-        taskbarIconOrder: JSON.parse(localStorage.getItem("taskbarIconOrder") || "[]"),
-        
+        taskbarIconOrder: JSON.parse(
+          localStorage.getItem("taskbarIconOrder") || "[]"
+        ),
+
         // Application settings
         settings: {
           hasSeenTutorial: localStorage.getItem("hasSeenTutorial"),
@@ -63,13 +67,23 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
           // Theme settings if they exist
           selectedTheme: localStorage.getItem("selectedTheme"),
           // Any other preferences
-          userPreferences: JSON.parse(localStorage.getItem("userPreferences") || "{}"),
+          userPreferences: JSON.parse(
+            localStorage.getItem("userPreferences") || "{}"
+          ),
         },
-        
+
         // Metadata
         exportVersion: "3.0", // Updated version for comprehensive export
         exportDate: new Date().toISOString(),
-        dataTypes: ["todos", "bookmarks", "tabs", "notes", "folders", "taskbar", "settings"]
+        dataTypes: [
+          "todos",
+          "bookmarks",
+          "tabs",
+          "notes",
+          "folders",
+          "taskbar",
+          "settings",
+        ],
       };
 
       const secureExport = await SecurityManager.encryptData(appData, otp);
@@ -125,7 +139,14 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
       }
 
       const importedData = await SecurityManager.decryptData(secureData, otp);
-      let importCounts = { todos: 0, bookmarks: 0, tabs: 0, notes: 0, folders: 0, settings: 0 };
+      let importCounts = {
+        todos: 0,
+        bookmarks: 0,
+        tabs: 0,
+        notes: 0,
+        folders: 0,
+        settings: 0,
+      };
 
       // Import todos
       if (importedData.todos && Array.isArray(importedData.todos)) {
@@ -143,7 +164,10 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
       }
 
       // Import tab manager groups
-      if (importedData.tabManagerGroups && Array.isArray(importedData.tabManagerGroups)) {
+      if (
+        importedData.tabManagerGroups &&
+        Array.isArray(importedData.tabManagerGroups)
+      ) {
         localStorage.setItem(
           "tabManagerGroups",
           JSON.stringify(importedData.tabManagerGroups)
@@ -164,7 +188,10 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
       }
 
       // Import taskbar customization
-      if (importedData.taskbarIconOrder && Array.isArray(importedData.taskbarIconOrder)) {
+      if (
+        importedData.taskbarIconOrder &&
+        Array.isArray(importedData.taskbarIconOrder)
+      ) {
         localStorage.setItem(
           "taskbarIconOrder",
           JSON.stringify(importedData.taskbarIconOrder)
@@ -174,7 +201,7 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
       // Import comprehensive settings
       if (importedData.settings) {
         let settingsCount = 0;
-        
+
         if (importedData.settings.hasSeenTutorial) {
           localStorage.setItem(
             "hasSeenTutorial",
@@ -194,12 +221,21 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
         }
 
         if (importedData.settings.selectedTheme) {
-          localStorage.setItem("selectedTheme", importedData.settings.selectedTheme);
+          localStorage.setItem(
+            "selectedTheme",
+            importedData.settings.selectedTheme
+          );
           settingsCount++;
         }
 
-        if (importedData.settings.userPreferences && typeof importedData.settings.userPreferences === 'object') {
-          localStorage.setItem("userPreferences", JSON.stringify(importedData.settings.userPreferences));
+        if (
+          importedData.settings.userPreferences &&
+          typeof importedData.settings.userPreferences === "object"
+        ) {
+          localStorage.setItem(
+            "userPreferences",
+            JSON.stringify(importedData.settings.userPreferences)
+          );
           settingsCount++;
         }
 
@@ -207,20 +243,29 @@ export const SecureDataManager: React.FC<SecureDataManagerProps> = ({
       }
 
       playTodoAdd();
-      
+
       // Create comprehensive success message
       const successParts = [];
-      if (importCounts.todos > 0) successParts.push(`${importCounts.todos} todos`);
-      if (importCounts.bookmarks > 0) successParts.push(`${importCounts.bookmarks} bookmark groups`);
-      if (importCounts.tabs > 0) successParts.push(`${importCounts.tabs} tab groups`);
-      if (importCounts.notes > 0) successParts.push(`${importCounts.notes} notes`);
-      if (importCounts.folders > 0) successParts.push(`${importCounts.folders} folders`);
-      if (importCounts.settings > 0) successParts.push(`${importCounts.settings} settings`);
-      
-      const successMessage = successParts.length > 0 
-        ? `Successfully imported: ${successParts.join(', ')}! Your taskbar customization and all preferences have been restored.`
-        : "Import completed! No data found to import.";
-        
+      if (importCounts.todos > 0)
+        successParts.push(`${importCounts.todos} todos`);
+      if (importCounts.bookmarks > 0)
+        successParts.push(`${importCounts.bookmarks} bookmark groups`);
+      if (importCounts.tabs > 0)
+        successParts.push(`${importCounts.tabs} tab groups`);
+      if (importCounts.notes > 0)
+        successParts.push(`${importCounts.notes} notes`);
+      if (importCounts.folders > 0)
+        successParts.push(`${importCounts.folders} folders`);
+      if (importCounts.settings > 0)
+        successParts.push(`${importCounts.settings} settings`);
+
+      const successMessage =
+        successParts.length > 0
+          ? `Successfully imported: ${successParts.join(
+              ", "
+            )}! Your taskbar customization and all preferences have been restored.`
+          : "Import completed! No data found to import.";
+
       showMessage("success", successMessage);
       setMode("menu");
     } catch (error) {
