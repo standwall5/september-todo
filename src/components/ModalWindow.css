@@ -47,6 +47,11 @@
   max-height: 600px;
 }
 
+.modal-window.size-extra-large {
+  width: 1300px;
+  max-height: 800px;
+}
+
 /* Standard window header pattern */
 .modal-header {
   background: var(--dark-orange);
@@ -107,6 +112,8 @@
   padding: 20px;
   overflow-y: auto;
 }
+
+
 
 /* Responsive behavior */
 @media (max-width: 1024px) {

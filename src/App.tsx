@@ -51,14 +51,38 @@ const AppContent: React.FC = () => {
 
       {/* Modal Components */}
       {currentWindow === "todo" && (
-        <Window title="Todo Manager" isActive={true} onClose={closeWindow}>
-          <TodoPage />
-        </Window>
+        <div className="modal-overlay">
+          <div className="modal-window size-large">
+            <div className="modal-header">
+              <h2 className="modal-title">Todo Manager</h2>
+              <div className="modal-controls">
+                <button className="modal-close-btn" onClick={closeWindow}>
+                  ×
+                </button>
+              </div>
+            </div>
+            <div className="modal-content">
+              <TodoPage />
+            </div>
+          </div>
+        </div>
       )}
       {currentWindow === "calendar" && (
-        <Window title="Calendar View" isActive={true} onClose={closeWindow}>
-          <CalendarPage todos={todos} onToggleTodo={toggleTodo} />
-        </Window>
+        <div className="modal-overlay">
+          <div className="modal-window size-extra-large">
+            <div className="modal-header">
+              <h2 className="modal-title">Calendar View</h2>
+              <div className="modal-controls">
+                <button className="modal-close-btn" onClick={closeWindow}>
+                  ×
+                </button>
+              </div>
+            </div>
+            <div className="modal-content">
+              <CalendarPage todos={todos} onToggleTodo={toggleTodo} />
+            </div>
+          </div>
+        </div>
       )}
       {currentWindow === "pomodoro" && (
         <Pomodoro isVisible={true} onClose={closeWindow} />
