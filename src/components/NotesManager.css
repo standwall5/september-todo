@@ -10,6 +10,8 @@
   min-width: 250px;
   background: var(--cream);
   border-right: 2px solid var(--darker-orange);
+  border: 2px solid var(--darker-orange);
+  border-right: 2px solid var(--darker-orange);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -19,32 +21,14 @@
 
 .notes-content {
   flex: 1;
-  .markdown-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 20px;
-    pointer-events: none;
-    z-index: 1;
-    font-family: "Georgia", "Times New Roman", serif;
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--black);
-    overflow: hidden;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    text-align: left;
-    box-sizing: border-box;
-    border: 2px solid transparent;
-    margin: 0;
-    vertical-align: top;
-    transform: translateY(-8px);
-  }
+  display: flex;
   flex-direction: column;
   overflow: hidden;
   background: var(--cream);
+  border: 2px solid var(--darker-orange);
+  border-left: none;
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
 }
 
 /* Sidebar Header */
