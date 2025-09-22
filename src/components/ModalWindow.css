@@ -113,6 +113,38 @@
   overflow-y: auto;
 }
 
+/* Special styling for todo modal content */
+.todo-modal-content {
+  padding: 0;
+  overflow: hidden;
+}
+
+.todo-modal-content .todo-page {
+  height: 100%;
+  border: 2px solid var(--darker-orange);
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+  margin: 0;
+  background: var(--cream);
+  overflow: hidden;
+}
+
+/* Special styling for calendar modal content */
+.calendar-modal-content {
+  padding: 0;
+  overflow: hidden;
+}
+
+.calendar-modal-content .calendar-page {
+  height: 100%;
+  border: 2px solid var(--darker-orange);
+  box-shadow: inset 2px 2px 0px var(--white),
+    inset -2px -2px 0px var(--darker-orange);
+  margin: 0;
+  background: var(--cream);
+  overflow: hidden;
+}
+
 /* Responsive behavior */
 @media (max-width: 1024px) {
   .modal-window {

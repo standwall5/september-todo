@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { TodoPage, CalendarPage } from "./features";
 import { TodoProvider, useTodoContext } from "./contexts/TodoContext";
 import AnimatedBackground from "./components/AnimatedBackground";
-import Window from "./components/Window";
 import Taskbar from "./components/Taskbar";
 import { Tutorial } from "./components/Tutorial";
 import { Pomodoro } from "./components/Pomodoro";
@@ -61,7 +60,7 @@ const AppContent: React.FC = () => {
                 </button>
               </div>
             </div>
-            <div className="modal-content">
+            <div className="modal-content todo-modal-content">
               <TodoPage />
             </div>
           </div>
@@ -78,7 +77,7 @@ const AppContent: React.FC = () => {
                 </button>
               </div>
             </div>
-            <div className="modal-content">
+            <div className="modal-content calendar-modal-content">
               <CalendarPage todos={todos} onToggleTodo={toggleTodo} />
             </div>
           </div>
